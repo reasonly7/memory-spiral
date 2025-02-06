@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { TodoListEntity } from './entities/todo-list.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CreateTodoListDto } from './dto/create-todo-list.dto';
 
 @Injectable()
 export class TodoListService {
@@ -17,8 +18,8 @@ export class TodoListService {
     });
   }
 
-  addOne(title: string) {
-    const newRecord = this.todoListRepository.create({ title });
+  addOne(createTodolistDto: CreateTodoListDto) {
+    const newRecord = this.todoListRepository.create(createTodolistDto);
     return this.todoListRepository.save(newRecord);
   }
 

@@ -7,13 +7,16 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity({ name: 'todo_list', comment: '存储待办事项' })
+@Entity({ name: 'datasource', comment: '存储记忆数据' })
 export class TodoListEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ name: 'title', comment: '标题', nullable: false, type: 'text' })
-  title: string;
+  @Column({ name: 'name', comment: '名称', nullable: false, type: 'tinytext' })
+  name: string;
+
+  @Column({ name: 'content', comment: '描述', nullable: false, type: 'text' })
+  content: string;
 
   @CreateDateColumn({ name: 'created_at', comment: '创建时间' })
   createdAt: Date;

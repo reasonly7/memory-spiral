@@ -2,11 +2,11 @@ import { del, get, post } from "./request";
 
 export interface TodoListItem {
   id: string;
-  title: string;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
+  name: string;
+  content: string;
 }
+
+export type FormModel = Pick<TodoListItem, "name" | "content">;
 
 export const todoPrefix = "/todo-list";
 
@@ -15,8 +15,8 @@ export const todoListApi = {
     return get<TodoListItem[]>(`${todoPrefix}`);
   },
 
-  create(title: string) {
-    return post<TodoListItem>(`${todoPrefix}`, { title });
+  create(formModel: FormModel) {
+    return post<TodoListItem>(`${todoPrefix}`, formModel);
   },
 
   remove(id: string) {

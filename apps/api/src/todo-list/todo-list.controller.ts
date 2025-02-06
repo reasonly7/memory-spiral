@@ -13,7 +13,7 @@ export class TodoListController {
 
   @Post()
   addOne(@Body() createTodolistDto: CreateTodoListDto) {
-    return this.todoListService.addOne(createTodolistDto.title);
+    return this.todoListService.addOne(createTodolistDto);
   }
 
   @Delete(':id')

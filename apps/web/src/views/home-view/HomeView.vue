@@ -1,15 +1,31 @@
 <script setup lang="ts">
 import { SvgIcon } from "@/components/svg-icon";
-import { Button, Form, Input, Skeleton, Tooltip } from "ant-design-vue";
+import {
+  Button,
+  Form,
+  FormInstance,
+  FormItem,
+  Input,
+  Skeleton,
+  Tooltip,
+  Textarea,
+} from "ant-design-vue";
 import { useLogout } from "./useLogout";
-import { onMounted, ref } from "vue";
-import { todoListApi, TodoListItem } from "@/api/todo-list.api";
-import Dayjs from "dayjs";
+import { onMounted, reactive, ref } from "vue";
+import { FormModel, todoListApi, TodoListItem } from "@/api/todo-list.api";
 import { useLocalStorage } from "@vueuse/core";
 
 const logout = useLogout();
 const list = useLocalStorage<TodoListItem[]>("todoList", []);
-const title = ref("");
+const getInitModel = () => ({
+  name: "",
+  content: "",
+});
+const resetModel = () => {
+  Object.assign(formModel, getInitModel());
+};
+const formRef = ref<FormInstance | null>(null);
+const formModel = reactive<FormModel>(getInitModel());
 const loading = ref(false);
 const removeStashId = ref<string | null>(null);
 
@@ -20,12 +36,12 @@ const search = async () => {
   loading.value = false;
 };
 const create = async () => {
-  const newItem = await todoListApi.create(title.value);
+  const newItem = await todoListApi.create(formModel);
   if (!newItem) {
     return;
   }
   list.value.push(newItem);
-  title.value = "";
+  resetModel();
 };
 const remove = async (id: string, index: number) => {
   if (removeStashId.value === null || removeStashId.value !== id) {
@@ -63,16 +79,6 @@ onMounted(() => {
     </header>
 
     <main class="page-main">
-      <Form name="searchForm" class="search-form-wrapper" @submit="create">
-        <Input placeholder="添加一条记录..." autofocus v-model:value="title" />
-
-        <Button type="primary" htmlType="submit">
-          <template #icon>
-            <SvgIcon type="plus"></SvgIcon>
-          </template>
-        </Button>
-      </Form>
-
       <ul class="list-wrapper">
         <Skeleton active v-if="loading"></Skeleton>
         <template v-else>
@@ -90,11 +96,44 @@ onMounted(() => {
                 <SvgIcon type="x"></SvgIcon>
               </template>
             </Button>
-            <span class="title" :title="item.title">{{ item.title }}</span>
-            <span class="date">{{ Dayjs(item.createdAt).fromNow() }}</span>
+            <span class="name" :title="item.name">{{ item.name }}</span>
+            <span class="content" :title="item.content">{{
+              item.content
+            }}</span>
           </li>
         </template>
       </ul>
+
+      <Form
+        name="searchForm"
+        class="search-form-wrapper"
+        @submit="create"
+        layout="horizontal"
+        ref="formRef"
+        :model="formModel"
+      >
+        <FormItem name="name" required>
+          <Input
+            class="name-input"
+            placeholder="name"
+            v-model:value="formModel.name"
+          />
+        </FormItem>
+
+        <FormItem name="content" required>
+          <Textarea
+            class="content-input"
+            placeholder="content"
+            v-model:value="formModel.content"
+          ></Textarea>
+        </FormItem>
+
+        <Button type="primary" htmlType="submit">
+          <template #icon>
+            <SvgIcon type="plus"></SvgIcon>
+          </template>
+        </Button>
+      </Form>
     </main>
   </div>
 </template>
@@ -146,18 +185,12 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    .search-form-wrapper {
-      width: 100%;
-      height: 48px;
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
     .list-wrapper {
       list-style: none;
       padding-left: 0;
       font-size: 14px;
       color: rgba(0, 0, 0, 0.65);
+      margin-bottom: 0;
       .list-item {
         display: flex;
         gap: 12px;
@@ -166,21 +199,26 @@ onMounted(() => {
         &:hover {
           color: rgba(0, 0, 0, 1);
         }
-        .title {
+        .content {
           flex: 1;
           width: 0;
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;
         }
-        .date {
-          color: rgba(5, 5, 5, 0.4);
-        }
+
         &.removing {
-          .title {
+          .name,
+          .content {
             color: tomato;
           }
         }
+      }
+    }
+    .search-form-wrapper {
+      margin-top: 100px;
+      .name-input {
+        width: 240px;
       }
     }
   }

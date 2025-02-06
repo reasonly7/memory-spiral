@@ -24,7 +24,7 @@ const create = async () => {
   if (!newItem) {
     return;
   }
-  list.value.unshift(newItem);
+  list.value.push(newItem);
   title.value = "";
 };
 const remove = async (id: string, index: number) => {
@@ -42,9 +42,7 @@ const remove = async (id: string, index: number) => {
 };
 
 onMounted(() => {
-  if (list.value.length === 0) {
-    search();
-  }
+  search();
 });
 </script>
 
@@ -52,7 +50,7 @@ onMounted(() => {
   <div class="page-wrapper">
     <header class="page-header">
       <img class="logo" src="@/assets/images/logo.png" alt="logo" />
-      <h1 class="app-title">Todo List</h1>
+      <h1 class="app-title">Memory Spiral</h1>
       <div class="right-wrapper">
         <Tooltip title="退出" placement="left">
           <Button type="text" @click="logout.logout">
@@ -66,25 +64,13 @@ onMounted(() => {
 
     <main class="page-main">
       <Form name="searchForm" class="search-form-wrapper" @submit="create">
-        <Input placeholder="Add todo ..." autofocus v-model:value="title" />
+        <Input placeholder="添加一条记录..." autofocus v-model:value="title" />
 
-        <Tooltip title="新增" placement="right">
-          <Button type="primary" htmlType="submit">
-            <template #icon>
-              <SvgIcon type="plus"></SvgIcon>
-            </template>
-          </Button>
-        </Tooltip>
-
-        <div class="right-wrapper">
-          <Tooltip title="刷新" placement="left">
-            <Button type="text" @click="search">
-              <template #icon>
-                <SvgIcon type="refresh-cw"></SvgIcon>
-              </template>
-            </Button>
-          </Tooltip>
-        </div>
+        <Button type="primary" htmlType="submit">
+          <template #icon>
+            <SvgIcon type="plus"></SvgIcon>
+          </template>
+        </Button>
       </Form>
 
       <ul class="list-wrapper">
@@ -166,14 +152,6 @@ onMounted(() => {
       display: flex;
       gap: 12px;
       align-items: center;
-      :deep(.ant-input) {
-        width: 256px;
-      }
-      .right-wrapper {
-        flex: 1;
-        display: flex;
-        justify-content: flex-end;
-      }
     }
     .list-wrapper {
       list-style: none;

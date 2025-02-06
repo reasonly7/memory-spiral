@@ -1,0 +1,19 @@
+{
+  "name": "ts-vue-nest-template",
+  "version": "0.0.0",
+  "private": true,
+  "description": "",
+  "author": "leishanglin",
+  "license": "MIT",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build"
+  },
+  "devDependencies": {
+    "turbo": "^2.3.3"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -3,7 +3,6 @@ import { SvgIcon } from "@/components/svg-icon";
 import {
   Button,
   Form,
-  FormInstance,
   FormItem,
   Input,
   Skeleton,
@@ -11,23 +10,15 @@ import {
   Textarea,
 } from "ant-design-vue";
 import { useLogout } from "./useLogout";
-import { onMounted, reactive, ref } from "vue";
-import { FormModel, todoListApi, TodoListItem } from "@/api/todo-list.api";
-import { useLocalStorage } from "@vueuse/core";
+import { onMounted, ref } from "vue";
+import { todoListApi, TodoListItem } from "@/api/todo-list.api";
+import { useCreateUpdateForm } from "./useCreateUpdateForm";
 
 const logout = useLogout();
-const list = useLocalStorage<TodoListItem[]>("todoList", []);
-const getInitModel = () => ({
-  name: "",
-  content: "",
-});
-const resetModel = () => {
-  Object.assign(formModel, getInitModel());
-};
-const formRef = ref<FormInstance | null>(null);
-const formModel = reactive<FormModel>(getInitModel());
+const list = ref<TodoListItem[]>([]);
 const loading = ref(false);
 const removeStashId = ref<string | null>(null);
+const form = useCreateUpdateForm()
 
 const search = async () => {
   removeStashId.value = null;
@@ -36,12 +27,12 @@ const search = async () => {
   loading.value = false;
 };
 const create = async () => {
-  const newItem = await todoListApi.create(formModel);
+  const newItem = await todoListApi.create(form.model);
   if (!newItem) {
     return;
   }
   list.value.push(newItem);
-  resetModel();
+   
 };
 const remove = async (id: string, index: number) => {
   if (removeStashId.value === null || removeStashId.value !== id) {

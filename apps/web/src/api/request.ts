@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosResponse, HttpStatusCode } from "axios";
 import { message as antdMessage } from "ant-design-vue";
 import { router } from "@/router";
+import { token } from "@/utils/token";
 
 export interface ResponseData<T> {
   data: T;
@@ -14,8 +15,9 @@ const request = axios.create({
 });
 
 request.interceptors.request.use((request) => {
-  if (localStorage.accessToken) {
-    request.headers.Authorization = `Bearer ${localStorage.accessToken}`;
+  const accessToken = token.get();
+  if (accessToken) {
+    request.headers.Authorization = `Bearer ${accessToken}`;
   }
 
   return request;
@@ -63,12 +65,12 @@ request.interceptors.response.use(
     const { message: serverMessage, code } = data;
     const tip = () =>
       message.error(
-        serverCodeMessageMap[code] || serverMessage || "Unknown Server Error."
+        serverCodeMessageMap[code] || serverMessage || "Unknown Server Error.",
       );
 
     switch (status) {
       case HttpStatusCode.Unauthorized:
-        delete localStorage.accessToken;
+        token.remove();
         router.replace("/login");
         tip();
         break;
@@ -76,7 +78,7 @@ request.interceptors.response.use(
         tip();
     }
     return Promise.resolve();
-  }
+  },
 );
 
 export function get<T>(...params: Parameters<typeof request.get>) {

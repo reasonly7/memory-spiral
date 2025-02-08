@@ -1,4 +1,5 @@
 import { useUserInfo } from "@/composables/useUserInfo";
+import { token } from "@/utils/token";
 import HomeView from "@/views/home-view/HomeView.vue";
 import LoginView from "@/views/login-view/LoginView.vue";
 import RegisterView from "@/views/register-view/RegisterView.vue";
@@ -27,8 +28,9 @@ export const router = createRouter({
 const { isExistUserInfo, getUserInfo } = useUserInfo();
 
 router.beforeEach(async (to, from) => {
+  const accessToken = token.get();
   if (to.meta.needLogin) {
-    if (localStorage.accessToken) {
+    if (accessToken) {
       if (!isExistUserInfo.value) {
         await getUserInfo();
       }
@@ -38,11 +40,7 @@ router.beforeEach(async (to, from) => {
   }
 
   // 登录后就不能再去到登录页
-  if (
-    to.name === RouteName.LOGIN &&
-    localStorage.accessToken &&
-    to.name !== from.name
-  ) {
+  if (to.name === RouteName.LOGIN && accessToken && to.name !== from.name) {
     return { name: from.name, replace: true };
   }
 });

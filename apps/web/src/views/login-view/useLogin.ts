@@ -2,6 +2,7 @@ import authApi from "@/api/auth.api";
 import { toReactive, useToggle } from "@vueuse/core";
 import { LoginFormModel } from "./login-form";
 import { reactive } from "vue";
+import { token } from "@/utils/token";
 
 export const useLogin = () => {
   const [loading, loadingToggle] = useToggle(false);
@@ -19,7 +20,7 @@ export const useLogin = () => {
     });
     loadingToggle(false);
     if (res) {
-      localStorage.accessToken = res.accessToken;
+      token.set(res.accessToken);
     } else {
       throw new Error("Login Failed");
     }

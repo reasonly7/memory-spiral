@@ -1,9 +1,9 @@
 import { authApi } from "@/api";
 import { UserItem } from "@/api/auth.api";
-import { useLocalStorage } from "@vueuse/core";
+import { useSessionStorage } from "@vueuse/core";
 import { computed } from "vue";
 
-const userInfo = useLocalStorage<Partial<UserItem>>("userInfo", {});
+const userInfo = useSessionStorage<Partial<UserItem>>("userInfo", {});
 
 export const useUserInfo = () => {
   const getUserInfo = async () => {

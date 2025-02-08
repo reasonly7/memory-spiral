@@ -10,7 +10,7 @@ Dayjs.extend(relativeTime);
 </script>
 
 <template>
-  <ConfigProvider :locale="zhCN" :theme="{ token: { colorPrimary: 'orangered' } }">
+  <ConfigProvider :locale="zhCN">
     <RouterView></RouterView>
   </ConfigProvider>
 </template>

@@ -8,6 +8,7 @@ import {
   Skeleton,
   Tooltip,
   Textarea,
+  Modal,
 } from "ant-design-vue";
 import { useLogout } from "./useLogout";
 import { onMounted, ref } from "vue";
@@ -18,7 +19,7 @@ const logout = useLogout();
 const list = ref<MemorySpiralItem[]>([]);
 const loading = ref(false);
 const removeStashId = ref<string | null>(null);
-const form = useCreateUpdateForm()
+const form = useCreateUpdateForm();
 
 const search = async () => {
   removeStashId.value = null;
@@ -32,7 +33,6 @@ const create = async () => {
     return;
   }
   list.value.push(newItem);
-   
 };
 const remove = async (id: string, index: number) => {
   if (removeStashId.value === null || removeStashId.value !== id) {
@@ -94,20 +94,22 @@ onMounted(() => {
           </li>
         </template>
       </ul>
+    </main>
 
+    <Modal>
       <Form
         name="searchForm"
         class="search-form-wrapper"
         @submit="create"
         layout="horizontal"
         ref="formRef"
-        :model="formModel"
+        :model="form.model"
       >
         <FormItem name="name" required>
           <Input
             class="name-input"
             placeholder="name"
-            v-model:value="formModel.name"
+            v-model:value="form.model.name"
           />
         </FormItem>
 
@@ -115,7 +117,7 @@ onMounted(() => {
           <Textarea
             class="content-input"
             placeholder="content"
-            v-model:value="formModel.content"
+            v-model:value="form.model.content"
           ></Textarea>
         </FormItem>
 
@@ -125,7 +127,7 @@ onMounted(() => {
           </template>
         </Button>
       </Form>
-    </main>
+    </Modal>
   </div>
 </template>
 
@@ -204,12 +206,6 @@ onMounted(() => {
             color: tomato;
           }
         }
-      }
-    }
-    .search-form-wrapper {
-      margin-top: 100px;
-      .name-input {
-        width: 240px;
       }
     }
   }

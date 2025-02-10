@@ -1,4 +1,4 @@
-import { FormModel } from "@/api/todo-list.api";
+import { FormModel } from "@/api/memory-spiral.api";
 import { toReactive, useToggle } from "@vueuse/core";
 import { FormInstance } from "ant-design-vue";
 import { computed, reactive, ref } from "vue";

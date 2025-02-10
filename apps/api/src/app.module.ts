@@ -7,7 +7,7 @@ import { CaptchaModule } from './captcha/captcha.module';
 import { RsaModule } from './rsa/rsa.module';
 import { AuthModule } from './auth/auth.module';
 import { ResponseModule } from './response/response.module';
-import { TodoListModule } from './todo-list/todo-list.module';
+import { MemorySpiralModule } from './memory-spiral/memory-spiral.module';
 import { importServeStaticModule } from './serve-static/importServeStaticModule';
 
 @Module({
@@ -21,7 +21,7 @@ import { importServeStaticModule } from './serve-static/importServeStaticModule'
     UserModule,
     RsaModule,
     AuthModule,
-    TodoListModule,
+    MemorySpiralModule,
   ],
   controllers: [],
   providers: [],

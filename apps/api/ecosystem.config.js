@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'todo-list', // 应用名称
+      name: 'memory-spiral', // 应用名称
       script: 'pnpm', // 使用 pnpm 命令启动
       args: 'start:prod', // 启动命令参数
       cwd: './', // 项目根目录

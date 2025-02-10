@@ -1,6 +1,6 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TodoListEntity } from 'src/todo-list/entities/todo-list.entity';
+import { MemorySpiralEntity } from 'src/memory-spiral/entities/memory-spiral.entity';
 import { User } from 'src/user/entities/user.entity';
 
 export const importTypeOrmModule = () => {
@@ -16,7 +16,7 @@ export const importTypeOrmModule = () => {
         password: configService.get<string>('database.password'),
         database: configService.get<string>('database.database'),
         synchronize: configService.get<boolean>('database.synchronize'),
-        entities: [User, TodoListEntity],
+        entities: [User, MemorySpiralEntity],
         migrations: ['src/typeorm/migrations/*.ts'],
       };
     },

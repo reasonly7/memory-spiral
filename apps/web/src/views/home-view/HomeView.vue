@@ -11,11 +11,11 @@ import {
 } from "ant-design-vue";
 import { useLogout } from "./useLogout";
 import { onMounted, ref } from "vue";
-import { todoListApi, TodoListItem } from "@/api/todo-list.api";
+import { memorySpiralApi, MemorySpiralItem } from "@/api/memory-spiral.api";
 import { useCreateUpdateForm } from "./useCreateUpdateForm";
 
 const logout = useLogout();
-const list = ref<TodoListItem[]>([]);
+const list = ref<MemorySpiralItem[]>([]);
 const loading = ref(false);
 const removeStashId = ref<string | null>(null);
 const form = useCreateUpdateForm()
@@ -23,11 +23,11 @@ const form = useCreateUpdateForm()
 const search = async () => {
   removeStashId.value = null;
   loading.value = true;
-  list.value = (await todoListApi.search()) || [];
+  list.value = (await memorySpiralApi.search()) || [];
   loading.value = false;
 };
 const create = async () => {
-  const newItem = await todoListApi.create(form.model);
+  const newItem = await memorySpiralApi.create(form.model);
   if (!newItem) {
     return;
   }
@@ -40,7 +40,7 @@ const remove = async (id: string, index: number) => {
     return;
   }
 
-  const success = await todoListApi.remove(id);
+  const success = await memorySpiralApi.remove(id);
   if (!success) {
     return;
   }

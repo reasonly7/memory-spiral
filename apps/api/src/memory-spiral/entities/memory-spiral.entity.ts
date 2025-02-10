@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 
 @Entity({ name: 'datasource', comment: '存储记忆数据' })
-export class TodoListEntity {
+export class MemorySpiralEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

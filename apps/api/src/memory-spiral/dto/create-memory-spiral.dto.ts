@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class CreateTodoListDto {
+export class CreateMemorySpiralDto {
   @IsString()
   @IsNotEmpty({ message: 'name 必填' })
   name: string;

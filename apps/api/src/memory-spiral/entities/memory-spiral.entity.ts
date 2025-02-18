@@ -18,6 +18,14 @@ export class MemorySpiralEntity {
   @Column({ name: 'content', comment: '描述', nullable: false, type: 'text' })
   content: string;
 
+  @Column({
+    name: 'count',
+    comment: '关键词计数',
+    nullable: false,
+    type: 'int',
+  })
+  count: number;
+
   @CreateDateColumn({ name: 'created_at', comment: '创建时间' })
   createdAt: Date;
 

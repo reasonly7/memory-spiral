@@ -9,6 +9,8 @@ import {
   Tooltip,
   Textarea,
   Modal,
+  Flex,
+  InputNumber,
 } from "ant-design-vue";
 import { useLogout } from "./useLogout";
 import { onMounted, ref } from "vue";
@@ -21,20 +23,17 @@ const loading = ref(false);
 const removeStashId = ref<string | null>(null);
 const form = useCreateUpdateForm();
 
-const search = async () => {
+const search = async (): Promise<void> => {
   removeStashId.value = null;
-  loading.value = true;
+  loading.value = false;
   list.value = (await memorySpiralApi.search()) || [];
   loading.value = false;
-};
-const create = async () => {
-  const newItem = await memorySpiralApi.create(form.model);
-  if (!newItem) {
-    return;
+  if (list.value.length === 0) {
+    form.modal.open();
   }
-  list.value.push(newItem);
 };
-const remove = async (id: string, index: number) => {
+
+const remove = async (id: string): Promise<void> => {
   if (removeStashId.value === null || removeStashId.value !== id) {
     removeStashId.value = id;
     return;
@@ -44,13 +43,11 @@ const remove = async (id: string, index: number) => {
   if (!success) {
     return;
   }
-  list.value.splice(index, 1);
+  search();
   removeStashId.value = null;
 };
 
-onMounted(() => {
-  search();
-});
+onMounted((): Promise<void> => search());
 </script>
 
 <template>
@@ -75,12 +72,12 @@ onMounted(() => {
         <template v-else>
           <li
             class="list-item"
-            v-for="(item, index) in list"
+            v-for="item in list"
             :class="{ removing: item.id === removeStashId }"
           >
             <Button
               type="text"
-              @click="remove(item.id, index)"
+              @click="remove(item.id)"
               :danger="item.id === removeStashId"
             >
               <template #icon>
@@ -96,17 +93,32 @@ onMounted(() => {
       </ul>
     </main>
 
-    <Modal>
+    <Modal
+      :title="form.modal.title"
+      v-model:open="form.modal.visible"
+      :footer="null"
+      :closable="false"
+      :keyboard="false"
+      :maskClosable="false"
+    >
       <Form
         name="searchForm"
         class="search-form-wrapper"
-        @submit="create"
+        @submit="
+          form.create().then((success) => {
+            if (success) {
+              search();
+              form.modal.close();
+            }
+          })
+        "
         layout="horizontal"
         ref="formRef"
         :model="form.model"
       >
         <FormItem name="name" required>
           <Input
+            autofocus
             class="name-input"
             placeholder="name"
             v-model:value="form.model.name"
@@ -118,14 +130,26 @@ onMounted(() => {
             class="content-input"
             placeholder="content"
             v-model:value="form.model.content"
+            autoSize
           ></Textarea>
         </FormItem>
 
-        <Button type="primary" htmlType="submit">
-          <template #icon>
-            <SvgIcon type="plus"></SvgIcon>
-          </template>
-        </Button>
+        <FormItem name="count" required>
+          <InputNumber
+            placeholder="keywords count"
+            v-model:value="form.model.count"
+            autoSize
+          />
+        </FormItem>
+
+        <Flex justify="flex-end">
+          <Button type="primary" htmlType="submit">
+            <template #icon>
+              <SvgIcon type="plus"></SvgIcon>
+            </template>
+            Create
+          </Button>
+        </Flex>
       </Form>
     </Modal>
   </div>

@@ -1,4 +1,4 @@
-import { FormModel } from "@/api/memory-spiral.api";
+import { FormModel, memorySpiralApi } from "@/api/memory-spiral.api";
 import { toReactive, useToggle } from "@vueuse/core";
 import { FormInstance } from "ant-design-vue";
 import { computed, reactive, ref } from "vue";
@@ -9,10 +9,10 @@ export const useCreateUpdateForm = (initModel?: FormModel) => {
   const [modalVisible, setModalVisible] = useToggle(false);
   const modalTitle = computed((): string => {
     if (isCreate.value) {
-      return "创建词条";
+      return "Create an entry";
     }
     if (isUpdate.value) {
-      return "更新词条";
+      return "Update an entry";
     }
     throw new Error();
   });
@@ -32,7 +32,7 @@ export const useCreateUpdateForm = (initModel?: FormModel) => {
       return {
         name: "",
         content: "",
-        link: null,
+        count: 0,
       };
     }
   };
@@ -45,10 +45,20 @@ export const useCreateUpdateForm = (initModel?: FormModel) => {
 
   const formRef = ref<FormInstance | null>(null);
 
+  const create = async (): Promise<boolean> => {
+    const newItem = await memorySpiralApi.create(model);
+    if (!newItem) {
+      return false;
+    }
+
+    return true;
+  };
+
   return toReactive({
     reset,
     formRef,
     model,
+    create,
     modal: toReactive({
       visible: modalVisible,
       open: onModalOpen,

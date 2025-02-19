@@ -105,7 +105,7 @@ function loop() {
       // 备份文件是几小时前更新的
       const timeSinceLastUpdateHours =
         (Date.now() - new Date(stats.mtime).getTime()) / 1000 / 60 / 60;
-      if (timeSinceLastUpdateHours >= 0.1) {
+      if (timeSinceLastUpdateHours >= 24) {
         exec(path.resolve(__dirname, "backup.sh"), (err, stdout, stderr) => {
           if (err) {
             console.error(`执行脚本时出错: ${err}`);

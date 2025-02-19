@@ -18,12 +18,4 @@ git add .
 git commit -m "Backup .memory_spiral.json"
 
 # 推送更改到远程仓库
-git push origin main
-
-# 检查 git push 是否成功
-if [ $? -eq 0 ]; then
-  echo "更改成功推送到远程仓库"
-else
-  echo "推送失败"
-  exit 1
-fi
+git push

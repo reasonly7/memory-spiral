@@ -3,6 +3,7 @@ const readline = require("readline");
 const os = require("os");
 const fs = require("fs");
 const path = require("path");
+const { exec } = require("child_process");
 
 const FILE_NAME = ".memory_spiral.json";
 const filePath = path.resolve(os.homedir(), FILE_NAME);
@@ -91,4 +92,39 @@ function loop() {
   }
 }
 
-loop();
+// 日常备份
+{
+  fs.stat(
+    path.resolve(__dirname, ".backup.memory_spiral.json"),
+    (err, stats) => {
+      if (err) {
+        console.error("Error getting file stats:", err);
+        return;
+      }
+
+      // 备份文件是几小时前更新的
+      const timeSinceLastUpdateHours =
+        (Date.now() - new Date(stats.mtime).getTime()) / 1000 / 60 / 60;
+      if (timeSinceLastUpdateHours >= 0.1) {
+        exec(path.resolve(__dirname, "backup.sh"), (err, stdout, stderr) => {
+          if (err) {
+            console.error(`执行脚本时出错: ${err}`);
+            return;
+          }
+
+          if (stderr) {
+            console.error(`脚本错误输出: ${stderr}`);
+            return;
+          }
+
+          console.log(`脚本输出: ${stdout}`);
+          setTimeout(() => {
+            loop();
+          }, 1000);
+        });
+      } else {
+        loop();
+      }
+    },
+  );
+}

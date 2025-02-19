@@ -51,28 +51,34 @@ const rl = readline.createInterface({
 function loop() {
   console.clear();
   if (isLearn()) {
-    rl.question(`${data.list.length + 1}: `, (text) => {
-      try {
-        const [title, content, _count] = text.trim().split(/\s+/);
-        const count = parseInt(_count);
-        if (
-          title.length > 0 &&
-          content.length > 0 &&
-          !Number.isNaN(count) &&
-          count > 0
-        ) {
-          data.list.push({ title, content, count });
-          data.index = spiral(data.list.length);
-          save();
-        } else {
-          throw new Error();
-        }
-      } catch {
-        console.warn("Invalid format! Try again: ");
-      } finally {
-        loop();
-      }
+    rl.question("title: ", (title) => {
+      title = title.trim();
+      rl.question("content: ", (content) => {
+        content = content.trim();
+        rl.question("count: ", (count) => {
+          try {
+            count = parseInt(count);
+            if (
+              title.length > 0 &&
+              content.length > 0 &&
+              !Number.isNaN(count) &&
+              count > 0
+            ) {
+              data.list.push({ title, content, count });
+              data.index = spiral(data.list.length);
+              save();
+            } else {
+              throw new Error();
+            }
+          } catch {
+            console.warn("Invalid format! Try again: ");
+          } finally {
+            loop();
+          }
+        });
+      });
     });
+
     return;
   }
 
@@ -92,7 +98,7 @@ function loop() {
   }
 }
 
-loop()
+loop();
 
 // 日常备份
 // {

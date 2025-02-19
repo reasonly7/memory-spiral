@@ -92,39 +92,41 @@ function loop() {
   }
 }
 
+loop()
+
 // 日常备份
-{
-  fs.stat(
-    path.resolve(__dirname, ".backup.memory_spiral.json"),
-    (err, stats) => {
-      if (err) {
-        console.error("Error getting file stats:", err);
-        return;
-      }
+// {
+//   fs.stat(
+//     path.resolve(__dirname, ".backup.memory_spiral.json"),
+//     (err, stats) => {
+//       if (err) {
+//         console.error("Error getting file stats:", err);
+//         return;
+//       }
 
-      // 备份文件是几小时前更新的
-      const timeSinceLastUpdateHours =
-        (Date.now() - new Date(stats.mtime).getTime()) / 1000 / 60 / 60;
-      if (timeSinceLastUpdateHours >= 0.001) {
-        exec(path.resolve(__dirname, "backup.sh"), (err, stdout, stderr) => {
-          if (err) {
-            console.error(`执行脚本时出错: ${err}`);
-            return;
-          }
+//       // 备份文件是几小时前更新的
+//       const timeSinceLastUpdateHours =
+//         (Date.now() - new Date(stats.mtime).getTime()) / 1000 / 60 / 60;
+//       if (timeSinceLastUpdateHours >= 0.001) {
+//         exec(path.resolve(__dirname, "backup.sh"), (err, stdout, stderr) => {
+//           if (err) {
+//             console.error(`执行脚本时出错: ${err}`);
+//             return;
+//           }
 
-          if (stderr) {
-            console.error(`脚本错误输出: ${stderr}`);
-            return;
-          }
+//           if (stderr) {
+//             console.error(`脚本错误输出: ${stderr}`);
+//             return;
+//           }
 
-          console.log(`脚本输出: ${stdout}`);
-          setTimeout(() => {
-            loop();
-          }, 1000);
-        });
-      } else {
-        loop();
-      }
-    },
-  );
-}
+//           console.log(`脚本输出: ${stdout}`);
+//           setTimeout(() => {
+//             loop();
+//           }, 1000);
+//         });
+//       } else {
+//         loop();
+//       }
+//     },
+//   );
+// }

@@ -19,3 +19,5 @@ git commit -m "Backup .memory_spiral.json"
 
 # 推送更改到远程仓库
 git push
+
+exit 0

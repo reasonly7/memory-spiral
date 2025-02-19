@@ -1,19 +1,17 @@
 {
-  "name": "ts-vue-nest-template",
-  "version": "0.0.0",
-  "private": true,
+  "name": "memory-spiral",
+  "version": "1.0.0",
   "description": "",
-  "author": "leishanglin",
-  "license": "MIT",
-  "scripts": {
-    "dev": "turbo dev",
-    "build": "turbo build"
+  "main": "index.js",
+  "bin": {
+    "ms": "index.js"
   },
-  "devDependencies": {
-    "turbo": "^2.3.3"
-  },
-  "packageManager": "pnpm@9.15.0",
-  "engines": {
-    "node": ">=18"
-  }
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "files": [
+    "package.json",
+    "index.js"
+  ]
 }

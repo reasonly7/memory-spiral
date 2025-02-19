@@ -1,3 +1,4 @@
-# memory-spiral
+# Memory Spiral
 
-developing...
+A command-line tool to assist me in learning and reviewing.
+

@@ -1,2 +1,3 @@
 node_modules
 .backup.memory_spiral.json
+*.tgz

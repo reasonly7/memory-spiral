@@ -86,6 +86,15 @@ function loop() {
     const { index, list } = data;
     rl.question(`${index + 1}. ${list[index].title}: `, (text) => {
       const count = parseInt(text);
+
+      // Count Help
+      if (text.trim() === "help") {
+        rl.question(`${list[index].title} ${list[index].content}`, () => {
+          loop();
+          return;
+        });
+      }
+
       if (list[index].count === count) {
         data.index = index + 1 === list.length ? -1 : index + 1;
         save();

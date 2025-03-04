@@ -53,6 +53,13 @@ function loop() {
   if (isLearn()) {
     rl.question("title: ", (title) => {
       title = title.trim();
+      if (data.list.some((item) => item.title === title)) {
+        console.clear();
+        rl.question(`Duplicate title name: ${title}`, () => {
+          loop();
+          return;
+        });
+      }
       rl.question("content: ", (content) => {
         content = content.trim();
         rl.question("count: ", (count) => {

@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # 复制 .memory_spiral.json 到 .backup.memory_spiral.json
+cd /Users/leishanglin/Projects/github/reasonly7/memory-spiral
 cp ~/.memory_spiral.json ./.backup.memory_spiral.json
 
 # 检查文件是否成功复制
